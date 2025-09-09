@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            /* Background Gradient Transition */
+            body {
+                margin: 0;
+                height: 100vh;
+                background: linear-gradient(135deg,
+                    #FFFF00, #E6F200, #CCE600, #B3D900, #99CC33,
+                    #80BF66, #66B299, #4DA5CC, #3399FF, #2B85FF,
+                    #2370FF, #1B5CFF, #1347FF, #0B33FF, #0000FF,
+                    #0000FF, #00008B, #00007B, #00006B);
+                background-size: 400% 400%;
+                background-position: 100% 50%;
+                transition: background-position 1s ease-in-out;
+                font-family:Arial ,sans-serif;
+            }
+
+            /* Add animate-background class for initial animation */
+            body.animate-background {
+                background-position: 0% 50%;
+            }
+
+            /* Now this new class starts the gradientShift loop */
+            body.start-loop {
+                animation: gradientShift 50s ease infinite;
+            }
+
+            body.resetting-gradient {
+                transition: background-position 0.8s ease-in-out;
+                animation: none !important;
+            }
+
+            /* Modal Slide Animations */
+            .modal-animate {
+                animation: slideIn 0.6s ease-out forwards;
+            }
+
+            .modal-exit {
+                animation: slideOut 0.6s ease-in forwards;
+            }
+
+            @keyframes gradientShift {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+
+            @keyframes slideIn {
+                0% {
+                    transform: translateY(100vh);
+                    opacity: 0;
+                }
+                100% {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            @keyframes slideOut {
+                0% {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(100vh);
+                    opacity: 0;
+                }
+            }
+
+            /* Modal */
+            #loginModal {
+                position: fixed;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: transparent;
+                z-index: 1000;
+            }
+
+            .login-container {
+                background: rgba(255, 255, 255, 0);
+                padding: 30px;
+                border-radius: 10px;
+                width: 350px;
+                position: relative;
+            }
+
+            h2 {
+                text-align: center;
+                color: lightcyan;
+                margin-bottom: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            label {
+                color: lightcyan;
+            }
+
+            input[type="text"],
+            input[type="password"] {
+                width: 95%;
+                padding: 10px;
+                border: none;
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.85);
+                font-size: 15px;
+                color: #333;
+                box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+            }
+
+            .btn {
+                padding: 14px;
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                width: 100%;
+                cursor: pointer;
+                border-radius: 6px;
+                font-size: 16px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(6px);
+            }
+
+            .btn:hover {
+                background: rgba(255, 255, 255, 0.35);
+                box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+                border-color: rgba(255, 255, 255, 0.6);
+            }
+
+            .user-type-selector {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+                background: rgba(255, 255, 255, 0.15);
+                border-radius: 8px;
+                padding: 4px;
+                box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .user-type {
+                flex: 1;
+                padding: 12px;
+                text-align: center;
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                cursor: pointer;
+                font-weight: 600;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(4px);
+            }
+
+            .user-type:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+
+            .user-type.active {
+                background: rgba(255, 255, 255, 0.95);
+                color: #333;
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+            }
+
+            .links {
+                text-align: center;
+                margin-top: 15px;
+            }
+
+            a {
+                color: lightcyan;
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+            a:hover {
+                color: cyan;
+                text-decoration: underline;
+            }
+
+            .error {
+                color: red;
+                background: rgba(255, 255, 255, 0.15);
+                padding: 12px;
+                border-radius: 8px;
+                margin-top: 20px;
+                text-align: center;
+                font-weight: 500;
+                border-left: 4px solid red;
+            }
+
+            .message {
+                color: yellow;
+                background: rgba(255, 255, 255, 0.15);
+                padding: 12px;
+                border-radius: 8px;
+                margin-top: 20px;
+                text-align: center;
+                font-weight: 500;
+                border-left: 4px solid yellow;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div id="loginModal" class="modal-animate">
+            <div class="login-container">
+                <h2>Login</h2>
+
+                <div class="user-type-selector">
+                    <div class="user-type active" data-type="patient">Patient</div>
+                    <div class="user-type" data-type="doctor">Doctor</div>
+                    <div class="user-type" data-type="admin">Admin</div>
+                </div>
+
+                <form th:action="@{/login}" method="post" id="loginForm">
+                    <div class="form-group">
+                        <input id="username" type="text" name="username" placeholder="Username" required />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" id="password" name="password" placeholder="Password" required />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" id="showPasswordToggle" />
+                        <label for="showPasswordToggle">Show Password</label>
+                    </div>
+
+                    <input type="hidden" name="userType" id="userTypeInput" value="patient" />
+                    <button type="submit" class="btn">Login</button>
+                </form>
+
+                <div class="links">
+                    <a th:href="@{/signup}">Sign up</a> |
+                    <a th:href="@{/forgot-password}">Forgot Password?</a>
+                </div>
+
+                <div th:if="${param.error}" class="error">Invalid username or password.</div>
+                <div th:if="${param.signupSuccess}" class="message">Signup successful! Please login.</div>
+                <div th:if="${param.logout}" class="message">You have been logged out successfully.</div>
+                <div th:if="${param.error == 'unauthorizedRole'}" class="error">You are not authorized to log in as a doctor.</div>
+            </div>
+        </div>
+
+        <script>
+            // Animate background on load
+            window.addEventListener('load', () => {
+                document.body.classList.add('animate-background');
+
+                setTimeout(() => {
+                    document.body.classList.remove('animate-background');
+                    document.body.classList.remove('resetting-gradient');
+                    document.body.style.backgroundPosition = ''; // clean inline style
+                    document.body.classList.add('start-loop');
+                }, 1300); // match transition time
+            });
+
+
+            // Handle user type toggle
+            const types = document.querySelectorAll('.user-type');
+            const userTypeInput = document.getElementById('userTypeInput');
+
+            types.forEach(type => {
+                type.addEventListener('click', () => {
+                    types.forEach(t => t.classList.remove('active'));
+                    type.classList.add('active');
+                    userTypeInput.value = type.dataset.type;
+                });
+            });
+
+            // Password visibility toggle
+            const showPasswordToggle = document.getElementById('showPasswordToggle');
+            const passwordInput = document.getElementById('password');
+
+            showPasswordToggle.addEventListener('change', function () {
+                passwordInput.type = this.checked ? 'text' : 'password';
+            });
+
+            // Animate background out and modal exit on link click
+            document.querySelectorAll('a').forEach(link => {
+                const isExternal = link.hasAttribute('target') || link.href.startsWith('mailto:');
+                if (!isExternal) {
+                    link.addEventListener('click', function (e) {
+                        e.preventDefault();
+
+                        const href = this.getAttribute('href');
+                        const modal = document.getElementById('loginModal') || document.getElementById('signupModal');
+
+                        // Step 1: Freeze gradient animation
+                        const body = document.body;
+                        const computedStyle = getComputedStyle(body);
+                        const currentBgPosition = computedStyle.backgroundPosition;
+
+                        body.classList.remove('start-loop'); // stop animation
+                        body.style.backgroundPosition = currentBgPosition; // freeze it visually
+
+                        // Step 2: Force a reflow (to apply style immediately)
+                        void body.offsetWidth;
+
+                        // Step 3: Animate back to start
+                        body.classList.add('resetting-gradient');
+                        body.style.backgroundPosition = '100% 50%';
+
+                        // Step 4: Animate modal out
+                        modal?.classList.remove('modal-animate');
+                        modal?.classList.add('modal-exit');
+
+                        // Step 5: Navigate after animation finishes
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 800); // sync with modal & background transition
+                    });
+                }
+            });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home | HealthConnect</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: #f0f2f5;
+        }
+
+        .header {
+            background-color: #007bff;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .main-content {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .cta-buttons {
+            margin-top: 30px;
+        }
+
+        .cta-buttons a {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 10px;
+            text-decoration: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .cta-buttons a:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Welcome to HealthConnect</h1>
+    <p>Your digital bridge to better healthcare</p>
+</div>
+
+<div class="main-content">
+    <h2>About Us</h2>
+    <p>HealthConnect is a platform designed to help patients easily connect with doctors, manage appointments, and securely handle their medical data.</p>
+    
+    <div class="cta-buttons">
+        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/signup}">Sign Up</a>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediBook - Hospital Booking System</title>
+  <style>
+    :root {
+        --primary: #2c7db1;
+        --secondary: #63ace5;
+        --accent: #f05133;
+        --light: #f8f9fa;
+        --dark: #343a40;
+        --success: #28a745;
+        --danger: #dc3545;
+        --warning: #ffc107;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: #f5f7fa;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    header {
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary);
+    }
+
+    .logo i {
+        margin-right: 10px;
+    }
+
+    .nav-links {
+        display: flex;
+        list-style: none;
+    }
+
+    .nav-links li {
+        margin-left: 25px;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+        color: var(--primary);
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: var(--secondary);
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+    }
+
+    .btn-outline:hover {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .hero {
+        background: linear-gradient(to right, rgba(44, 125, 177, 0.9), rgba(99, 172, 229, 0.8)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f8f9fa"/><path d="M0 50 L100 50 M50 0 L50 100" stroke="%23e9ecef" stroke-width="2"/></svg>');
+        background-size: cover;
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+    }
+
+    .hero p {
+        font-size: 20px;
+        max-width: 700px;
+        margin: 0 auto 30px;
+    }
+
+    .section {
+        padding: 60px 0;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 40px;
+        color: var(--primary);
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .card {
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-header {
+        background-color: var(--primary);
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(99, 172, 229, 0.3);
+    }
+
+    .login-container {
+        max-width: 400px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-type-selector {
+        display: flex;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .user-type {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+        background-color: #eee;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .user-type.active {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .dashboard {
+        display: none;
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    footer {
+        background-color: var(--dark);
+        color: white;
+        padding: 40px 0;
+        text-align: center;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        margin: 20px 0;
+    }
+
+    .footer-links li {
+        margin: 0 15px;
+    }
+
+    .footer-links a {
+        color: white;
+        text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+        .navbar {
+            flex-direction: column;
+        }
+
+        .nav-links {
+            margin-top: 15px;
+        }
+
+        .nav-links li {
+            margin: 0 10px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+        }
+
+        .hero p {
+            font-size: 18px;
+        }
+    }
+  </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+  <div class="container">
+    <nav class="navbar">
+      <div class="logo">
+        <i>⚕️</i> MediBook
+      </div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div>
+        <a href="#" class="btn btn-outline" id="loginBtn">Login</a>
+        <a href="#" class="btn" id="registerBtn">Register</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero" id="home">
+  <div class="container">
+    <h1>Your Health is Our Priority</h1>
+    <p>Book appointments with top doctors easily and manage your healthcare needs with our advanced booking system.</p>
+    <a href="#booking" class="btn">Book an Appointment</a>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="section" id="services">
+  <div class="container">
+    <h2 class="section-title">Our Services</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <h3>Doctor Appointments</h3>
+        </div>
+        <div class="card-body">
+          <p>Book appointments with specialized doctors based on your medical needs and availability.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3>Medical Records</h3>
+        </div>
+        <div class="card-body">
+          <p>Access your medical history and records anytime through our secure portal.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3>Emergency Care</h3>
+        </div>
+        <div class="card-body">
+          <p>Immediate care services for urgent medical conditions with our emergency department.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Registration Section -->
+<section class="section" id="registration">
+  <div class="container">
+    <h2 class="section-title">Patient Registration</h2>
+    <div class="login-container">
+      <form id="registrationForm">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" class="form-control" required>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Register</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Login Modal -->
+<div id="loginModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000;">
+  <div style="position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+    <div class="login-container">
+      <span style="position: absolute; top: 10px; right: 10px; font-size: 24px; cursor: pointer;" id="closeModal">×</span>
+      <h2 style="text-align: center; margin-bottom: 20px;">Login</h2>
+      <div class="user-type-selector">
+        <div class="user-type active" data-type="patient">Patient</div>
+        <div class="user-type" data-type="doctor">Doctor</div>
+        <div class="user-type" data-type="admin">Admin</div>
+      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-control" required>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard Section -->
+<section class="section" id="dashboard">
+  <div class="container">
+    <div class="dashboard" id="patientDashboard">
+      <div class="dashboard-header">
+        <h2>Patient Dashboard</h2>
+        <p>Welcome, <span id="patientName">Patient</span>!</p>
+      </div>
+      <div>
+        <h3>Your Appointments</h3>
+        <div id="patientAppointments">
+          <p>No appointments scheduled yet.</p>
+        </div>
+        <button class="btn" style="margin-top: 20px;">Book New Appointment</button>
+      </div>
+    </div>
+
+    <div class="dashboard" id="doctorDashboard">
+      <div class="dashboard-header">
+        <h2>Doctor Dashboard</h2>
+        <p>Welcome, Dr. <span id="doctorName">Doctor</span>!</p>
+      </div>
+      <div>
+        <h3>Today's Appointments</h3>
+        <div id="doctorAppointments">
+          <p>No appointments scheduled for today.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard" id="adminDashboard">
+      <div class="dashboard-header">
+        <h2>Admin Dashboard</h2>
+        <p>Welcome, <span id="adminName">Admin</span>!</p>
+      </div>
+      <div>
+        <h3>Manage Doctors</h3>
+        <button class="btn" style="margin-bottom: 20px;">Add New Doctor</button>
+        <div id="doctorsList">
+          <p>No doctors in the system.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer id="contact">
+  <div class="container">
+    <h3>MediBook Hospital Booking System</h3>
+    <p>Making healthcare accessible and convenient for everyone.</p>
+    <ul class="footer-links">
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms of Service</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+    <p>© 2023 MediBook. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // DOM Elements
+  const loginBtn = document.getElementById('loginBtn');
+  const registerBtn = document.getElementById('registerBtn');
+  const loginModal = document.getElementById('loginModal');
+  const closeModal = document.getElementById('closeModal');
+  const userTypes = document.querySelectorAll('.user-type');
+  const loginForm = document.getElementById('loginForm');
+  const registrationForm = document.getElementById('registrationForm');
+  const patientDashboard = document.getElementById('patientDashboard');
+  const doctorDashboard = document.getElementById('doctorDashboard');
+  const adminDashboard = document.getElementById('adminDashboard');
+
+  // Event Listeners
+  loginBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      loginModal.style.display = 'block';
+  });
+
+  closeModal.addEventListener('click', function() {
+      loginModal.style.display = 'none';
+  });
+
+  registerBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('registration').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  userTypes.forEach(type => {
+      type.addEventListener('click', function() {
+          userTypes.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+      });
+  });
+
+  loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const userType = document.querySelector('.user-type.active').dataset.type;
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      // Simulate login process
+      simulateLogin(userType, email, password);
+  });
+
+  registrationForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const dob = document.getElementById('dob').value;
+      const password = document.getElementById('password').value;
+
+      // Simulate registration process
+      simulateRegistration(fullName, email, phone, dob, password);
+  });
+
+  // Simulate login process
+  function simulateLogin(userType, email, password) {
+      // Hide modal
+      loginModal.style.display = 'none';
+
+      // Show appropriate dashboard
+      if (userType === 'patient') {
+          patientDashboard.style.display = 'block';
+          document.getElementById('patientName').textContent = email.split('@')[0];
+          doctorDashboard.style.display = 'none';
+          adminDashboard.style.display = 'none';
+      } else if (userType === 'doctor') {
+          doctorDashboard.style.display = 'block';
+          document.getElementById('doctorName').textContent = email.split('@')[0];
+          patientDashboard.style.display = 'none';
+          adminDashboard.style.display = 'none';
+      } else if (userType === 'admin') {
+          adminDashboard.style.display = 'block';
+          document.getElementById('adminName').textContent = email.split('@')[0];
+          patientDashboard.style.display = 'none';
+          doctorDashboard.style.display = 'none';
+      }
+
+      // Scroll to dashboard
+      document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+
+      // Show success message
+      alert('Login successful! Redirecting to your dashboard.');
+  }
+
+  // Simulate registration process
+  function simulateRegistration(fullName, email, phone, dob, password) {
+      // Show success message
+      alert('Registration successful! You can now login with your credentials.');
+
+      // Clear form
+      document.getElementById('registrationForm').reset();
+
+      // Show login modal
+      loginModal.style.display = 'block';
+  }
+
+  // Close modal if clicked outside
+  window.addEventListener('click', function(e) {
+      if (e.target === loginModal) {
+          loginModal.style.display = 'none';
+      }
+  });
+</script>
+</body>
+</html>
